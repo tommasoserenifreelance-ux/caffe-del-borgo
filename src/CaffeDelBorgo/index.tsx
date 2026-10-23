@@ -1,5 +1,12 @@
 import React from "react";
-import { AbsoluteFill, Audio, Sequence, Series, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  interpolate,
+  Sequence,
+  Series,
+  staticFile,
+} from "remotion";
 import { Clip, ClipProps } from "../shared/Clip";
 import { FilmLook } from "../shared/FilmLook";
 import { Subtitle, Subtitles } from "../shared/Subtitles";
@@ -40,7 +47,7 @@ const SHOTS: Shot[] = [
     origin: "48% 62%",
     zoomFrom: 1.35,
     zoomTo: 1.45,
-    volume: 0.3,
+    volume: 0,
   },
   // Bartender intro, full sentence
   {
@@ -61,7 +68,7 @@ const SHOTS: Shot[] = [
     origin: "48% 62%",
     zoomFrom: 1.3,
     zoomTo: 1.38,
-    volume: 0.4,
+    volume: 0,
   },
   // Campari
   {
@@ -72,7 +79,7 @@ const SHOTS: Shot[] = [
     origin: "48% 62%",
     zoomFrom: 1.3,
     zoomTo: 1.38,
-    volume: 0.4,
+    volume: 0,
   },
   // Vermouth
   {
@@ -83,7 +90,7 @@ const SHOTS: Shot[] = [
     origin: "48% 62%",
     zoomFrom: 1.3,
     zoomTo: 1.38,
-    volume: 0.4,
+    volume: 0,
   },
   // Sparkling wine, the "sbagliato" part
   {
@@ -94,7 +101,7 @@ const SHOTS: Shot[] = [
     origin: "48% 62%",
     zoomFrom: 1.3,
     zoomTo: 1.4,
-    volume: 0.4,
+    volume: 0,
   },
   // Orange peel
   {
@@ -105,7 +112,7 @@ const SHOTS: Shot[] = [
     origin: "35% 55%",
     zoomFrom: 1.2,
     zoomTo: 1.3,
-    volume: 0.4,
+    volume: 0,
   },
   // Stir and the finished glass
   {
@@ -116,7 +123,7 @@ const SHOTS: Shot[] = [
     origin: "50% 52%",
     zoomFrom: 1.2,
     zoomTo: 1.3,
-    volume: 0.4,
+    volume: 0,
   },
 ];
 
@@ -124,6 +131,28 @@ export const CAFFE_DEL_BORGO_DURATION = SHOTS.reduce(
   (sum, s) => sum + s.frames,
   0,
 );
+
+// Original lounge bed (scripts/make_music.py). It dips while the intro is spoken.
+const MUSIC_VOLUME = 0.5;
+const MUSIC_UNDER_SPEECH = 0.15;
+
+const Music: React.FC = () => {
+  const speechStart = TITLE_FRAMES;
+  const speechEnd = TITLE_FRAMES + SHOTS[1].frames;
+  return (
+    <Audio
+      src={staticFile("music/lounge-bed.wav")}
+      volume={(f) =>
+        interpolate(
+          f,
+          [speechStart - 6, speechStart + 4, speechEnd - 4, speechEnd + 8],
+          [MUSIC_VOLUME, MUSIC_UNDER_SPEECH, MUSIC_UNDER_SPEECH, MUSIC_VOLUME],
+          { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+        )
+      }
+    />
+  );
+};
 
 const TitleSfx: React.FC = () => {
   const lastWordAt = WORD_DELAY + (TITLE_WORDS.length - 1) * WORD_STAGGER;
@@ -161,6 +190,7 @@ export const CaffeDelBorgo: React.FC = () => {
         <Title words={TITLE_WORDS} />
         <TitleSfx />
       </Sequence>
+      <Music />
       <FilmLook />
       {/* Subtitles sit above the film look so they stay crisp. */}
       <Sequence from={TITLE_FRAMES} durationInFrames={SHOTS[1].frames}>
