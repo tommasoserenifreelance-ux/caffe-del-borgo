@@ -2,13 +2,13 @@ import React from "react";
 import { AbsoluteFill, Audio, Sequence, Series, staticFile } from "remotion";
 import { Clip, ClipProps } from "../shared/Clip";
 import { FilmLook } from "../shared/FilmLook";
+import { Subtitle, Subtitles } from "../shared/Subtitles";
 import { Title, TitleWord, WORD_DELAY, WORD_STAGGER } from "../shared/Title";
 
 const RECIPE = "clips/IMG_4386.mp4";
 const INTRO = "clips/IMG_4385.mp4";
 const PEEL = "clips/IMG_4387.mp4";
 const STIR = "clips/IMG_4388.mp4";
-const TASTING = "clips/IMG_4394.mp4";
 
 // Stacked title shown over the opening shot.
 export const TITLE_WORDS: TitleWord[] = [
@@ -20,9 +20,13 @@ export const TITLE_WORDS: TitleWord[] = [
 
 type Shot = ClipProps & { frames: number };
 
+// What the bartender says in the intro, timed in seconds of the intro clip.
+const INTRO_FROM = 0.3;
+const INTRO_SUBTITLES: Subtitle[] = [];
+
 const TITLE_FRAMES = 72;
 
-// Each action is kept whole, and both spoken lines are left uncut.
+// Each action is kept whole; the video ends when the drink is finished.
 const SHOTS: Shot[] = [
   // Finished drink under the title
   {
@@ -111,16 +115,6 @@ const SHOTS: Shot[] = [
     zoomTo: 1.3,
     volume: 0.4,
   },
-  // Tasting, with her line after the sip
-  {
-    src: TASTING,
-    from: 5.4,
-    frames: 150,
-    origin: "50% 40%",
-    zoomFrom: 1,
-    zoomTo: 1.06,
-    volume: 1,
-  },
 ];
 
 export const CAFFE_DEL_BORGO_DURATION = SHOTS.reduce(
@@ -165,6 +159,10 @@ export const CaffeDelBorgo: React.FC = () => {
         <TitleSfx />
       </Sequence>
       <FilmLook />
+      {/* Subtitles sit above the film look so they stay crisp. */}
+      <Sequence from={TITLE_FRAMES} durationInFrames={SHOTS[1].frames}>
+        <Subtitles items={INTRO_SUBTITLES} offset={INTRO_FROM} />
+      </Sequence>
     </AbsoluteFill>
   );
 };

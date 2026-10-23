@@ -10,7 +10,8 @@ import {
 import { loadFont } from "@remotion/fonts";
 
 // Instrument Serif (Google Fonts, OFL), bundled locally in public/fonts.
-const fontFamily = "Instrument Serif";
+export const TITLE_FONT = "Instrument Serif";
+const fontFamily = TITLE_FONT;
 loadFont({
   family: fontFamily,
   url: staticFile("fonts/InstrumentSerif-Regular.woff2"),
