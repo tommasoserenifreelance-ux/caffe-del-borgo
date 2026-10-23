@@ -22,7 +22,10 @@ type Shot = ClipProps & { frames: number };
 
 // What the bartender says in the intro, timed in seconds of the intro clip.
 const INTRO_FROM = 0.3;
-const INTRO_SUBTITLES: Subtitle[] = [];
+const INTRO_SUBTITLES: Subtitle[] = [
+  { text: "Bianca, qual è il tuo drink preferito?", start: 0.4, end: 2.3 },
+  { text: "Il Negroni Sbagliato!", start: 2.8, end: 4.7 },
+];
 
 const TITLE_FRAMES = 72;
 
