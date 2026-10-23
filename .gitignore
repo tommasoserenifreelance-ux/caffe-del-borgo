@@ -5,3 +5,6 @@ dist
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Original iPhone 4K HDR files (too big for git); the converted .mp4 are used.
+*.MOV

@@ -4,24 +4,128 @@ import { Clip, ClipProps } from "../shared/Clip";
 import { FilmLook } from "../shared/FilmLook";
 import { Title, TitleWord, WORD_DELAY, WORD_STAGGER } from "../shared/Title";
 
+const RECIPE = "clips/IMG_4386.mp4";
+const INTRO = "clips/IMG_4385.mp4";
+const PEEL = "clips/IMG_4387.mp4";
+const STIR = "clips/IMG_4388.mp4";
+const TASTING = "clips/IMG_4394.mp4";
+
 // Stacked title shown over the opening shot.
 export const TITLE_WORDS: TitleWord[] = [
-  { text: "caffè", size: 360 },
-  { text: "del", size: 220 },
-  { text: "borgo", size: 360 },
+  { text: "il", size: 200 },
+  { text: "negroni", size: 330 },
+  { text: "sbagliato", size: 270 },
+  { text: "del borgo", size: 200 },
 ];
 
 type Shot = ClipProps & { frames: number };
 
 const TITLE_FRAMES = 72;
 
-// Shots in order. Put the clips in public/clips/ and list them here.
-// The first shot carries the title.
-const SHOTS: Shot[] = [];
+// Each action is kept whole, and both spoken lines are left uncut.
+const SHOTS: Shot[] = [
+  // Finished drink under the title
+  {
+    src: RECIPE,
+    from: 30.9,
+    playbackRate: 0.6,
+    frames: TITLE_FRAMES,
+    origin: "48% 62%",
+    zoomFrom: 1.35,
+    zoomTo: 1.45,
+    volume: 0.3,
+  },
+  // Bartender intro, full sentence
+  {
+    src: INTRO,
+    from: 0.3,
+    frames: 132,
+    origin: "50% 40%",
+    zoomFrom: 1,
+    zoomTo: 1.05,
+    volume: 1,
+  },
+  // Ice
+  {
+    src: RECIPE,
+    from: 2.6,
+    playbackRate: 1.3,
+    frames: 51,
+    origin: "48% 62%",
+    zoomFrom: 1.3,
+    zoomTo: 1.38,
+    volume: 0.4,
+  },
+  // Campari
+  {
+    src: RECIPE,
+    from: 11.7,
+    playbackRate: 1.2,
+    frames: 58,
+    origin: "48% 62%",
+    zoomFrom: 1.3,
+    zoomTo: 1.38,
+    volume: 0.4,
+  },
+  // Vermouth
+  {
+    src: RECIPE,
+    from: 22.8,
+    playbackRate: 1.2,
+    frames: 55,
+    origin: "48% 62%",
+    zoomFrom: 1.3,
+    zoomTo: 1.38,
+    volume: 0.4,
+  },
+  // Sparkling wine, the "sbagliato" part
+  {
+    src: RECIPE,
+    from: 26.8,
+    playbackRate: 1.2,
+    frames: 92,
+    origin: "48% 62%",
+    zoomFrom: 1.3,
+    zoomTo: 1.4,
+    volume: 0.4,
+  },
+  // Orange peel
+  {
+    src: PEEL,
+    from: 0.3,
+    playbackRate: 1.3,
+    frames: 115,
+    origin: "35% 55%",
+    zoomFrom: 1.2,
+    zoomTo: 1.3,
+    volume: 0.4,
+  },
+  // Stir and the finished glass
+  {
+    src: STIR,
+    from: 0.2,
+    playbackRate: 1.3,
+    frames: 122,
+    origin: "50% 52%",
+    zoomFrom: 1.2,
+    zoomTo: 1.3,
+    volume: 0.4,
+  },
+  // Tasting, with her line after the sip
+  {
+    src: TASTING,
+    from: 5.4,
+    frames: 150,
+    origin: "50% 40%",
+    zoomFrom: 1,
+    zoomTo: 1.06,
+    volume: 1,
+  },
+];
 
-export const CAFFE_DEL_BORGO_DURATION = Math.max(
-  TITLE_FRAMES,
-  SHOTS.reduce((sum, s) => sum + s.frames, 0),
+export const CAFFE_DEL_BORGO_DURATION = SHOTS.reduce(
+  (sum, s) => sum + s.frames,
+  0,
 );
 
 const TitleSfx: React.FC = () => {
